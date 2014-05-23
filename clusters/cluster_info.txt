@@ -1,0 +1,30 @@
+Cluster 01
+
+RTT = 37Latitude = 31.038296Longitude= -2.6350362
+Cluster 11
+
+RTT = 140Latitude = -69.95507Longitude= -174.9768
+Cluster 21
+
+RTT = 50Latitude = 37.896736Longitude= -132.45677
+Cluster 31
+
+RTT = 100Latitude = -73.68345Longitude= 140.92322
+Cluster 41
+
+RTT = 153Latitude = 37.407055Longitude= -35.0241
+Cluster 51
+
+RTT = 36Latitude = -85.64422Longitude= -98.14542
+Cluster 61
+
+RTT = 95Latitude = 37.21896Longitude= 91.99304
+Cluster 71
+
+RTT = 67Latitude = -86.166885Longitude= 36.81394
+Cluster 81
+
+RTT = 162Latitude = -65.00322Longitude= -59.081726
+Cluster 91
+
+RTT = 151Latitude = 47.352776Longitude= -160.30325

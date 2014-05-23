@@ -39,10 +39,22 @@ public class KMeansAlgo {
 			String line = sc.nextLine();
 			StringTokenizer tokens = new StringTokenizer(line, ",");
 			TableData temp = new TableData();
-			temp.ip = tokens.nextToken();
-			temp.lat = Float.parseFloat(tokens.nextToken());
-			temp.lon = Float.parseFloat(tokens.nextToken());
-			temp.rtt = Integer.parseInt(tokens.nextToken());
+			String token = tokens.nextToken();
+			if(token.equals("null"))
+				continue;
+			temp.ip = token;
+			token = tokens.nextToken();
+			if(token.equals("null"))
+				continue;
+			temp.lat = Float.parseFloat(token);
+			token = tokens.nextToken();
+			if(token.equals("null"))
+				continue;
+			temp.lon = Float.parseFloat(token);
+			token = tokens.nextToken();
+			if(token.equals("null"))
+				continue;
+			temp.rtt = Integer.parseInt(token);
 			
 			/*temp.display();
 			temp.ip = sc.nextInt();
@@ -116,13 +128,13 @@ public class KMeansAlgo {
 				mlon = sumlon/size;
 				mrtt = sumrtt/size;
 				
-				if(cluster[i].lat != mlat)
+				if((cluster[i].lat - mlat) > 0.5)
 				{
 					changed=true;
 					cluster[i].lat = mlat;
 				}
 				
-				if(cluster[i].lon != mlon)
+				if((cluster[i].lon - mlon) > 0.5)
 				{
 					changed=true;
 					cluster[i].lon = mlon;
@@ -136,7 +148,13 @@ public class KMeansAlgo {
 				
 			}
 		}
-		displayOutput();
+		//displayOutput();
+		try {
+			generateOutput();
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	private int distance(int i, TableData val) {
@@ -223,16 +241,50 @@ public class KMeansAlgo {
 		}
 	}
 	
+	private void generateOutput() throws FileNotFoundException
+	{
+		File [] clusters = new File[k];
+		File dir = new File("clusters");
+		dir.mkdir();
+		File cluster_info = new File("clusters/cluster_info.txt");
+		PrintWriter info = new PrintWriter(cluster_info);
+		int i;
+		for(i=0; i<k; i++)
+		{
+			System.out.println("Cluster " + i+1);
+			System.out.print("Cluter Info : ");
+			cluster[i].display();
+			info.println("Cluster " + i+1 +"\n");
+			info.println("RTT = "+cluster[i].rtt+"Latitude = "+cluster[i].lat+"Longitude= "+cluster[i].lon);;
+			clusters[i] = new File("clusters/cluster_"+i);
+			//clusters[i].mkdir();
+			PrintWriter p = new PrintWriter(clusters[i]);
+			ArrayList<TableData> contents = output.get(i);
+			Iterator<TableData> it = contents.iterator();
+			while(it.hasNext())
+			{
+				TableData temp = it.next();
+				p.println(temp.ip+"\t"+temp.lat+"\t"+temp.lon+"\t"+temp.rtt);
+				temp.display();
+			}
+			p.close();
+		}
+		info.close();
+	}
+	
 	public void generateInputDataset() throws FileNotFoundException
 	{
 		Random rnd = new Random(System.currentTimeMillis());
-		int ip = 123456, i;
-		float lat= 75, lon = 80;
+		int ip = 123456, i, rtt;
+		float lat, lon;
 		File f = new File("gen_input.txt");
 		PrintWriter p = new PrintWriter(f);
 		for(i=0; i<200; i++)
 		{
-			p.println(ip+","+lat+","+lon+","+Math.abs(rnd.nextInt()%200));
+			lat = (Math.abs(rnd.nextFloat()*180) - 90);
+			lon = (Math.abs(rnd.nextFloat()*360) - 180);
+			rtt = (Math.abs(rnd.nextInt())%200);
+			p.println(ip+","+lat+","+lon+","+rtt);
 		}
 		p.close();
 	}
